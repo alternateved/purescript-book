@@ -20,9 +20,9 @@
         devShell = pkgs.mkShell {
           buildInputs =  with pkgs; [
             purescript-language-server
-            purs
-            purty
+            purs-tidy
             spago
+            nodePackages.pscid
           ];
         };
       });
