@@ -15,14 +15,14 @@
       let
         pkgs = import nixpkgs { inherit system; };
         easy-ps = import easy-purescript-nix-source { inherit pkgs; };
-        inherit (easy-ps) purescript-language-server purs purty spago;
+        inherit (easy-ps) purescript-language-server purs purs-tidy pscid spago;
       in {
         devShell = pkgs.mkShell {
           buildInputs =  with pkgs; [
             purescript-language-server
             purs-tidy
             spago
-            nodePackages.pscid
+            pscid
           ];
         };
       });
