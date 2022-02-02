@@ -10,19 +10,22 @@
     };
   };
 
-  outputs = {self, nixpkgs, flake-utils, easy-purescript-nix-source}:
+  outputs = { self, nixpkgs, flake-utils, easy-purescript-nix-source }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
         easy-ps = import easy-purescript-nix-source { inherit pkgs; };
         inherit (easy-ps) purescript-language-server purs purs-tidy pscid spago;
-      in {
+      in
+      {
         devShell = pkgs.mkShell {
-          buildInputs =  with pkgs; [
+          buildInputs = with pkgs; [
             purescript-language-server
+            purs
             purs-tidy
             spago
             pscid
+            nodejs
           ];
         };
       });
