@@ -8,7 +8,6 @@ module Data.Path
   ) where
 
 import Prelude
-
 import Data.Maybe (Maybe(..))
 
 data Path

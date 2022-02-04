@@ -11,6 +11,7 @@ You can edit this file as you like.
   , "foldable-traversable"
   , "integers"
   , "maybe"
+  , "math"
   , "prelude"
   , "psci-support"
   , "strings"

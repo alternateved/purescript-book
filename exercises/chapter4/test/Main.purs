@@ -1,14 +1,14 @@
 module Test.Main where
 
 import Prelude
-import Test.Examples
-import Test.MySolutions
+import Test.Examples (allFiles, allFiles', factorial, factorialTailRec, factors, factorsV2, factorsV3, fib, length, lengthTailRec)
 import Data.Array (sort)
 import Data.Foldable (sequence_)
 import Data.Maybe (Maybe(..))
-import Data.Path (Path(..), filename, root)
+import Data.Path (filename, root)
 import Data.Tuple.Nested ((/\))
 import Effect (Effect)
+import Test.MySolutions (allTrue, cartesianProduct, countEven, fibTailRec, isEven, isPrime, keepNonNegative, keepNonNegativeRewrite, onlyFiles, primeFactors, reverse, squared, triples, whereIs, (<$?>))
 import Test.Unit (TestSuite, suite, test)
 import Test.Unit.Assert (assert, assertFalse)
 import Test.Unit.Assert as Assert
@@ -18,7 +18,6 @@ main :: Effect Unit
 main =
   runTest do
     runChapterExamples
-    {-  Move this block comment starting point to enable more tests
     suite "Exercise Group - Recursion" do
       suite "Exercise - isEven" do
         test "0 is even" do
@@ -74,7 +73,7 @@ main =
         test "Define <$?> operator for filter" do
           Assert.equal [ 1, 1 ]
             $ (_ == 1)
-            <$?> [ 1, 2, 3, 1, 2, 3 ]
+                <$?> [ 1, 2, 3, 1, 2, 3 ]
         test "keepNonNegativeRewrite " do
           Assert.equal [ 0.0, 2.0, 3.0 ]
             $ keepNonNegativeRewrite [ -1.5, -1.0, 0.0, -0.1, 2.0, 3.0, -4.0 ]
@@ -90,6 +89,7 @@ main =
           $ isPrime 4
         assert "997 is prime"
           $ isPrime 997
+
       suite "Exercise - cartesianProduct" do
         let
           -- Don't worry if this this testing helper function signature looks confusing.
@@ -121,6 +121,7 @@ main =
           Assert.equal (sort [ [ 3, 4, 5 ], [ 5, 12, 13 ], [ 6, 8, 10 ] ])
             $ sort
             $ triples 13
+
       suite "Exercise - primeFactors" do
         let
           primeFactorsTest :: Int -> Array Int -> _
@@ -130,11 +131,11 @@ main =
                 $ sort
                 $ primeFactors n
         primeFactorsTest 1 []
-        primeFactorsTest 2 [2]
-        primeFactorsTest 3 [3]
-        primeFactorsTest 4 [2, 2]
-        primeFactorsTest 6 [3, 2]
-        primeFactorsTest 18 [3, 3, 2]
+        primeFactorsTest 2 [ 2 ]
+        primeFactorsTest 3 [ 3 ]
+        primeFactorsTest 4 [ 2, 2 ]
+        primeFactorsTest 6 [ 3, 2 ]
+        primeFactorsTest 18 [ 3, 3, 2 ]
         primeFactorsTest 210 [ 7, 5, 3, 2 ]
     suite "Exercise Group - Folds and Tail Recursion" do
       test "Exercise - allTrue" do
@@ -175,15 +176,17 @@ main =
           ]
           $ map filename
           $ onlyFiles root
-      suite "Exercise - whereIs" do
-        test "locates a file"
-          $ Assert.equal (Just ("/bin/"))
-          $ map filename
-          $ whereIs root "ls"
-        test "doesn't locate a file"
-          $ Assert.equal (Nothing)
-          $ map filename
-          $ whereIs root "cat"
+    suite "Exercise - whereIs" do
+      test "locates a file"
+        $ Assert.equal (Just ("/bin/"))
+        $ map filename
+        $ whereIs root "ls"
+      test "doesn't locate a file"
+        $ Assert.equal (Nothing)
+        $ map filename
+        $ whereIs root "cat"
+
+{-  Move this block comment starting point to enable more tests
       suite "Exercise - largestSmallest" do
         let
           testls :: String -> Array String -> Path -> TestSuite
@@ -220,16 +223,17 @@ runChapterExamples =
         , "factorsV3" /\ factorsV3
         ]
       n /\ xs <-
-        [ 1 /\ [[1,1]]
-        , 2 /\ [[1,2]]
-        , 3 /\ [[1,3]]
-        , 4 /\ [[1,4],[2,2]]
-        , 10 /\ [[1,10],[2,5]]
-        , 100 /\ [[1,100],[2,50],[4,25],[5,20],[10,10]]
+        [ 1 /\ [ [ 1, 1 ] ]
+        , 2 /\ [ [ 1, 2 ] ]
+        , 3 /\ [ [ 1, 3 ] ]
+        , 4 /\ [ [ 1, 4 ], [ 2, 2 ] ]
+        , 10 /\ [ [ 1, 10 ], [ 2, 5 ] ]
+        , 100 /\ [ [ 1, 100 ], [ 2, 50 ], [ 4, 25 ], [ 5, 20 ], [ 10, 10 ] ]
         ]
       pure $ test (name <> " " <> show n) do
         Assert.equal (sort $ map sort xs)
-          $ sort $ map sort f n
+          $ sort
+          $ map sort f n
     test "factorialTailRec" do
       Assert.equal 120
         $ factorialTailRec 5 1
@@ -239,11 +243,11 @@ runChapterExamples =
     test "allFiles" do
       Assert.equal allFileAndDirectoryNames
         $ filename
-        <$> allFiles root
+            <$> allFiles root
     test "allFiles'" do
       Assert.equal allFileAndDirectoryNames
         $ filename
-        <$> allFiles' root
+            <$> allFiles' root
 
 allFileAndDirectoryNames :: Array (String)
 allFileAndDirectoryNames =

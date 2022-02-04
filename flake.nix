@@ -15,11 +15,12 @@
       let
         pkgs = import nixpkgs { inherit system; };
         easy-ps = import easy-purescript-nix-source { inherit pkgs; };
-        inherit (easy-ps) purescript-language-server purs purs-tidy pscid spago;
+        inherit (easy-ps) psa purescript-language-server purs purs-tidy pscid spago;
       in
       {
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
+            psa
             purescript-language-server
             purs
             purs-tidy
