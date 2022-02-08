@@ -57,9 +57,6 @@ fromSingleton y _ = y
 -- (Easy) Write a function circleAtOrigin which constructs a Circle (of type Shape)
 -- centered at the origin with radius 10.0.
 
-origin :: Point
-origin = { x: 0.0, y: 0.0 }
-
 circleAtOrigin :: Shape
 circleAtOrigin = Circle origin 10.0
 
@@ -69,17 +66,13 @@ circleAtOrigin = Circle origin 10.0
 centerShape :: Shape -> Shape
 centerShape (Circle _ r) = Circle origin r
 centerShape (Rectangle _ s1 s2) = Rectangle origin s1 s2
-centerShape line@(Line s e) = Line (s - delta) (e - delta)
-  where
-  delta = getCenter line
+centerShape line@(Line s e) = let delta = getCenter line in Line (s - delta) (e - delta)
 centerShape (Text _ text) = Text origin text
 
 doubleShape :: Shape -> Shape
 doubleShape (Circle p r) = Circle p (r * 2.0)
 doubleShape (Rectangle p s1 s2) = Rectangle p (s1 * 2.0) (s2 * 2.0)
-doubleShape (Line p1 p2) = Line (p1 * double) (p2 * double)
-  where
-  double = { x: 2.0, y: 2.0 }
+doubleShape (Line p1 p2) = let double = { x: 2.0, y: 2.0 } in Line (p1 * double) (p2 * double)
 doubleShape text = text
 
 doubleScaleAndCenter :: Shape -> Shape
@@ -108,5 +101,6 @@ calculateWattage (Amp a) (Volt v) = Watt (a * v)
 
 area :: Shape -> Number
 area (Circle _ r) = pi * r * r
-area (Rectangle _ s1 s2) = (s1 * s2) / 2.0
-area _ = 0.0
+area (Rectangle _ s1 s2) = (s1 * s2)
+area (Line _ _) = 0.0
+area (Text _ _) = 0.0
