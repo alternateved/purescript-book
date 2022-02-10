@@ -24,7 +24,6 @@ main :: Effect Unit
 main =
   runTest do
     runChapterExamples
-    {-  Move this block comment starting point to enable more tests
     suite "Exercise Group - Applicative and Effects" do
       suite "Exercise - Numeric operators that work with Maybe" do
         suite "addMaybe" do
@@ -100,7 +99,7 @@ main =
       suite "Exercise - stateRegex" do
         let
           stateTest str exp = test str do
-             Assert.equal exp $ R.test stateRegex str
+            Assert.equal exp $ R.test stateRegex str
         stateTest "CA" true
         stateTest "Ca" true
         stateTest "C" false
@@ -110,7 +109,7 @@ main =
       suite "Exercise - nonEmptyRegex" do
         let
           nonEmptyTest str exp = test str do
-              Assert.equal exp $ R.test nonEmptyRegex str
+            Assert.equal exp $ R.test nonEmptyRegex str
         nonEmptyTest "Houston" true
         nonEmptyTest "My Street" true
         nonEmptyTest "Ñóñá" true
@@ -153,6 +152,7 @@ main =
       let
         leaf :: forall a. a -> Tree a
         leaf x = Branch Leaf x Leaf
+
         intTree :: Tree Int
         intTree = Branch (Branch (leaf 1) 2 (leaf 3)) 4 (Branch (leaf 5) 6 (leaf 7))
       suite "Exercise - traverse" do
@@ -178,14 +178,16 @@ main =
               $ Branch (leaf 1.0) 2.0 (leaf 3.0)
           test "Just - sequence" do
             Assert.equal (Just $ Branch (leaf 1) 2 (leaf 3))
-              $ sequence $ Branch (leaf $ Just 1) (Just 2) (leaf $ Just 3)
+              $ sequence
+              $ Branch (leaf $ Just 1) (Just 2) (leaf $ Just 3)
           test "Nothing - traverse" do
             Assert.equal Nothing
               $ traverse fromNumber
               $ Branch (leaf 1.0) 2.0 (leaf 3.7)
           test "Nothing - sequence" do
             Assert.equal Nothing
-              $ sequence $ Branch (leaf $ Nothing) (Just 2) (leaf $ Just 3)
+              $ sequence
+              $ Branch (leaf $ Nothing) (Just 2) (leaf $ Just 3)
         test "Array side-effect - check traversal order" do
           Assert.equal (1 .. 7)
             $ snd
@@ -242,7 +244,6 @@ main =
           Assert.equal Nothing
             $ traverseUsingSequence fromNumber [ 1.0, 2.7 ]
 
--}
 runChapterExamples :: TestSuite
 runChapterExamples =
   test "Todo for book maintainers - Add tests for chapter examples" do
