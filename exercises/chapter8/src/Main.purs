@@ -33,7 +33,7 @@ renderValidationErrors xs =
   in
     [ D.div
         { className: "alert alert-danger row"
-        , children: [ D.ul_ (map renderError xs) ]
+        , children: [ D.div_ (map renderError xs) ]
         }
     ]
 
@@ -59,7 +59,7 @@ formField name placeholder value setValue =
                         let
                           handleValue :: Maybe String -> Effect Unit
                           handleValue (Just v) = setValue v
-                          handleValue Nothing  = pure unit
+                          handleValue Nothing = pure unit
                         in
                           handler targetValue handleValue
                     }
@@ -71,14 +71,14 @@ formField name placeholder value setValue =
 mkAddressBookApp :: Effect (ReactComponent {})
 mkAddressBookApp =
   -- incoming \props are unused
-  reactComponent "AddressBookApp" \props -> R.do
+  reactComponent "AddressBookApp" \_ -> R.do
     -- `useState` takes a default initial value and returns the
     -- current value and a way to update the value.
     -- Consult react-hooks docs for a more detailed explanation of `useState`.
     Tuple person setPerson <- useState examplePerson
     let
       errors = case validatePerson' person of
-        Left  e -> e
+        Left e -> e
         Right _ -> []
 
       -- helper-function to return array unchanged instead of Nothing if index is out of bounds
@@ -102,11 +102,13 @@ mkAddressBookApp =
           { className: "container"
           , children:
               renderValidationErrors errors
-                <> [ D.div
+                <>
+                  [ D.div
                       { className: "row"
                       , children:
                           [ D.form_
-                              $ [ D.h3_ [ D.text "Basic Information" ]
+                              $
+                                [ D.h3_ [ D.text "Basic Information" ]
                                 , formField "First Name" "First Name" person.firstName \s ->
                                     setPerson _ { firstName = s }
                                 , formField "Last Name" "Last Name" person.lastName \s ->
@@ -120,7 +122,7 @@ mkAddressBookApp =
                                     setPerson _ { homeAddress { state = s } }
                                 , D.h3_ [ D.text "Contact Information" ]
                                 ]
-                              <> renderPhoneNumbers
+                                  <> renderPhoneNumbers
                           ]
                       }
                   ]

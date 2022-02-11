@@ -27,6 +27,7 @@
             spago
             pscid
             nodejs
+            nodePackages.parcel-bundler
           ];
         };
       });

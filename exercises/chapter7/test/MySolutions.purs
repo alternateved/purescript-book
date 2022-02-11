@@ -185,7 +185,7 @@ sequenceUsingTraverse = traverse identity
 -- but is written in terms of sequence.
 
 traverseUsingSequence :: forall t a b m. Traversable t => Applicative m => (a -> m b) -> t a -> m (t b)
-traverseUsingSequence f ta = sequence (f <$> ta)
+traverseUsingSequence f = sequence <<< map f
 
 -- Notes
 
