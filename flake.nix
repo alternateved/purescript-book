@@ -27,6 +27,7 @@
             spago
             pscid
             nodejs
+            nodePackages.typescript-language-server
             nodePackages.parcel-bundler
           ];
         };

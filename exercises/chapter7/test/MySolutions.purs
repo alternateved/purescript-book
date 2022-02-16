@@ -69,7 +69,7 @@ stateRegex = unsafeRegex "^[a-zA-Z]{2}$" noFlags
 -- environment.
 
 nonEmptyRegex :: Regex
-nonEmptyRegex = unsafeRegex "(.|\\s)*\\S(.|\\s)*" noFlags
+nonEmptyRegex = unsafeRegex "\\S" noFlags
 
 -- (Medium) Write a function validateAddressImproved that is similar to
 -- validateAddress, but uses the above stateRegex to validate the state field and
