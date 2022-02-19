@@ -7,6 +7,8 @@ You can edit this file as you like.
   [ "aff"
   , "aff-promise"
   , "argonaut"
+  , "argonaut-core"
+  , "argonaut-codecs"
   , "argonaut-generic"
   , "arrays"
   , "bifunctors"

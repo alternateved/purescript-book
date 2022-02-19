@@ -10,7 +10,7 @@ import Data.Maybe (Maybe)
 import Effect (Effect)
 import Effect.Exception (error, throwException)
 
--- Easy) Write a function third which returns the third element of an array with
+-- (Easy) Write a function third which returns the third element of an array with
 -- three or more elements. Your function should return an appropriate Maybe type.
 -- Hint: Look up the types of the head and tail functions from the Data.Array
 -- module in the arrays package. Use do notation with the Maybe monad to combine
