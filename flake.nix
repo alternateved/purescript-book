@@ -27,6 +27,7 @@
             spago
             pscid
             nodejs
+            nodePackages.prettier
             nodePackages.typescript-language-server
             nodePackages.parcel-bundler
           ];
