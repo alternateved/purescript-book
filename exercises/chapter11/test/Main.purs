@@ -28,7 +28,6 @@ main :: Effect Unit
 main =
   runTest do
     test "" success
-    {-  Move this block comment starting point to enable more tests
     suite "Exercises Group - The State Monad" do
       suite "testParens" do
         let
@@ -36,13 +35,15 @@ main =
           runTestParens expected str =
             test testName do
               Assert.equal expected $ testParens str
-            where testName = "str = \"" <> str <> "\""
+            where
+            testName = "str = \"" <> str <> "\""
         runTestParens true ""
         runTestParens true "(()(())())"
         runTestParens true "(hello)"
         runTestParens false ")"
         runTestParens false "(()()"
         runTestParens false ")("
+
     suite "Exercises Group - The Reader Monad" do
       suite "indents" do
         let
@@ -53,49 +54,54 @@ main =
             \    I am even more indented"
         test "should render with indentations" do
           Assert.equal expectedText
-            $ render $ cat
-              [ line "Here is some indented text:"
-              , indent $ cat
-                [ line "I am indented"
-                , line "So am I"
-                , indent $ line "I am even more indented"
+            $ render
+            $ cat
+                [ line "Here is some indented text:"
+                , indent $ cat
+                    [ line "I am indented"
+                    , line "So am I"
+                    , indent $ line "I am even more indented"
+                    ]
                 ]
-              ]
     suite "Exercises Group - The Writer Monad" do
       suite "sumArrayWriter" do
         test "should sum arrays" do
           Assert.equal (Additive 21)
-            $ execWriter $ do
-              sumArrayWriter [1, 2, 3]
-              sumArrayWriter [4, 5]
-              sumArrayWriter [6]
+            $ execWriter
+            $ do
+                sumArrayWriter [ 1, 2, 3 ]
+                sumArrayWriter [ 4, 5 ]
+                sumArrayWriter [ 6 ]
       suite "collatz" do
         let
           expected_11 =
-            Tuple 14 [11, 34, 17, 52, 26, 13, 40, 20, 10, 5, 16, 8, 4, 2, 1]
+            Tuple 14 [ 11, 34, 17, 52, 26, 13, 40, 20, 10, 5, 16, 8, 4, 2, 1 ]
           expected_15 =
-            Tuple 17 [15, 46, 23, 70, 35, 106, 53, 160, 80, 40, 20, 10, 5, 16, 8, 4, 2, 1]
+            Tuple 17 [ 15, 46, 23, 70, 35, 106, 53, 160, 80, 40, 20, 10, 5, 16, 8, 4, 2, 1 ]
         test "c = 11" do
           Assert.equal expected_11
             $ collatz 11
         test "c = 15" do
           Assert.equal expected_15
             $ collatz 15
+
     suite "Exercises Group - Monad Transformers" do
       suite "safeDivide" do
         test "should fail when dividing by zero" do
           Assert.equal (Left "Divide by zero!")
-            $ unwrap $ runExceptT $ safeDivide 5 0
+            $ unwrap
+            $ runExceptT
+            $ safeDivide 5 0
         test "should successfully divide for any other input" do
           Assert.equal (Right 2) $ unwrap $ runExceptT $ safeDivide 6 3
       suite "parser" do
         let
           runParser p s = unwrap $ runExceptT $ runWriterT $ runStateT p s
         test "should parse a string" do
-          Assert.equal (Right (Tuple (Tuple "abc" "def") ["The state is abcdef"]))
+          Assert.equal (Right (Tuple (Tuple "abc" "def") [ "The state is abcdef" ]))
             $ runParser (string "abc") "abcdef"
         test "should fail if string could not be parsed" do
-          Assert.equal (Left ["Could not parse"])
+          Assert.equal (Left [ "Could not parse" ])
             $ runParser (string "abc") "foobar"
       suite "indents with ReaderT and WriterT" do
         let
@@ -106,7 +112,8 @@ main =
             \    I am even more indented"
         test "should render with indentations" do
           Assert.equal expectedText
-            $ render' $ do
+            $ render'
+            $ do
                 line' "Here is some indented text:"
                 indent' $ do
                   line' "I am indented"
@@ -119,27 +126,37 @@ main =
         let
           runParser p s = unwrap $ runExceptT $ runWriterT $ runStateT p s
         test "should parse as followed by bs" do
-          Assert.equal (Right (Tuple (Tuple "aaabb" "cde") [
-            "The state is aaabbcde",
-            "The state is aabbcde",
-            "The state is abbcde",
-            "The state is bbcde",
-            "The state is bcde"]))
+          Assert.equal
+            ( Right
+                ( Tuple (Tuple "aaabb" "cde")
+                    [ "The state is aaabbcde"
+                    , "The state is aabbcde"
+                    , "The state is abbcde"
+                    , "The state is bbcde"
+                    , "The state is bcde"
+                    ]
+                )
+            )
             $ runParser asFollowedByBs "aaabbcde"
         test "should fail if first is not a" do
-          Assert.equal (Left ["Could not parse"])
+          Assert.equal (Left [ "Could not parse" ])
             $ runParser asFollowedByBs "bfoobar"
         test "should parse as and bs" do
-          Assert.equal (Right (Tuple (Tuple "babbaa" "cde") [
-            "The state is babbaacde",
-            "The state is abbaacde",
-            "The state is bbaacde",
-            "The state is baacde",
-            "The state is aacde",
-            "The state is acde"]))
+          Assert.equal
+            ( Right
+                ( Tuple (Tuple "babbaa" "cde")
+                    [ "The state is babbaacde"
+                    , "The state is abbaacde"
+                    , "The state is bbaacde"
+                    , "The state is baacde"
+                    , "The state is aacde"
+                    , "The state is acde"
+                    ]
+                )
+            )
             $ runParser asOrBs "babbaacde"
         test "should fail if first is not a or b" do
-          Assert.equal (Left ["Could not parse","Could not parse"])
+          Assert.equal (Left [ "Could not parse", "Could not parse" ])
             $ runParser asOrBs "foobar"
 
     suite "Exercises Group - The RWS Monad" do
@@ -148,8 +165,8 @@ main =
         runGame testGame = runRWS testGame env initialGameState
         env = GameEnvironment { debugMode: false, playerName: "Phil" }
 
-        playerHasAllItems (GameState {inventory}) = inventory == S.fromFoldable [Candle, Matches]
-        mapIsEmpty (GameState {items}) = M.isEmpty items
+        playerHasAllItems (GameState { inventory }) = inventory == S.fromFoldable [ Candle, Matches ]
+        mapIsEmpty (GameState { items }) = M.isEmpty items
         expectedLogs = ("You now have the Candle" : "You now have the Matches" : L.Nil)
 
       suite "adds all items to your inventory when cheating" do
@@ -165,5 +182,3 @@ main =
         runCheatTest "move and cheat" $ move 0 (-1) *> move 0 1 *> cheat
         runCheatTest "pickup matches and cheat" $ pickUp Matches *> cheat
         runCheatTest "pickup all, move, and cheat" $ pickUp Matches *> move 0 1 *> pickUp Candle *> cheat
-
--}
