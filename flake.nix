@@ -28,8 +28,9 @@
             pscid
             nodejs
             nodePackages.prettier
-            nodePackages.typescript-language-server
             nodePackages.parcel-bundler
+            nodePackages.typescript-language-server
+            nodePackages.vscode-langservers-extracted
           ];
         };
       });
