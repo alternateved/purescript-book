@@ -2,7 +2,7 @@ module Test.Main where
 
 import Prelude
 
-import Data.Array (sort, sortBy)
+import Data.Array (length, null, sort, sortBy)
 import Data.Foldable (foldr)
 import Data.Function (on)
 import Data.List (List(..), fromFoldable)
@@ -21,6 +21,12 @@ isSorted = go <<< fromFoldable
 ints :: Array Int -> Array Int
 ints = identity
 
+-- (Easy) Write a function bools which forces the types of xs and ys to be Array
+-- Boolean, and add additional properties which test mergePoly at that type.
+
+bools :: Array Boolean -> Array Boolean
+bools = identity
+
 intToBool :: (Int -> Boolean) -> Int -> Boolean
 intToBool = identity
 
@@ -38,11 +44,34 @@ main = do
     in
       eq result expected <?> "Result:\n" <> show result <> "\nnot equal to expected:\n" <> show expected
 
+  -- (Easy) Write a property which asserts that merging an array with the empty array
+  -- does not modify the original array.
+
+  -- (Easy) Add an appropriate error message to the remaining property for merge.
+
+  quickCheck \xs ->
+    eq (merge (sort xs) []) (sort xs)
+      <?> "Expected: merging with empty array does not modify original array"
+
   quickCheck \xs ys ->
     eq (merge (sorted xs) (sorted ys)) (sort $ sorted xs <> sorted ys)
+      <?> "Expected: merge works with newtype"
 
   quickCheck \xs ys ->
     eq (ints $ mergePoly (sorted xs) (sorted ys)) (sort $ sorted xs <> sorted ys)
+      <?> "Expected: merge works with arrays of polymorphic types if they have an Ord instance (variant Int)"
+
+  quickCheck \xs ys ->
+    eq (bools $ mergePoly (sorted xs) (sorted ys)) (sort $ sorted xs <> sorted ys)
+      <?> "Expected: merge works with arrays of polymorphic types if they have an Ord instance (variant Boolean)"
+
+  -- (Medium) Choose a pure function from the core libraries (for example, from the
+  -- arrays package), and write a QuickCheck property for it, including an
+  -- appropriate error message. Your property should use a helper function to fix any
+  -- polymorphic type arguments to either Int or Boolean.
+
+  quickCheck \xs ->
+    eq (null $ bools xs) (length xs == 0) <?> "Expected: null returns true if array is empty"
 
   quickCheck \xs ys f ->
     let
