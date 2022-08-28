@@ -27,6 +27,7 @@
             nodejs
             nodePackages.prettier
             nodePackages.parcel-bundler
+            nodePackages.typescript
             nodePackages.typescript-language-server
             nodePackages.vscode-langservers-extracted
           ];
